@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_brokerage_root"
+              name="Brokerage"
+              sequence="25"
+              web_icon="broker_client_onboarding,static/description/icon.png"
+              groups="broker_client_onboarding.group_broker_back_office"/>
+
+    <menuitem id="menu_broker_clients"
+              name="Clients"
+              parent="menu_brokerage_root"
+              action="action_broker_client"
+              sequence="10"/>
+    <menuitem id="menu_broker_trading_accounts"
+              name="Trading Accounts"
+              parent="menu_brokerage_root"
+              action="action_broker_trading_account"
+              sequence="20"/>
+    <menuitem id="menu_broker_kyc_documents"
+              name="KYC Documents"
+              parent="menu_brokerage_root"
+              action="action_broker_kyc_document"
+              sequence="30"/>
+    <menuitem id="menu_broker_transactions"
+              name="Deposits &amp; Withdrawals"
+              parent="menu_brokerage_root"
+              action="action_broker_transaction"
+              sequence="40"/>
+    <menuitem id="menu_broker_approval_log"
+              name="Approval Log"
+              parent="menu_brokerage_root"
+              action="action_broker_approval_log"
+              sequence="50"/>
+
+    <menuitem id="menu_broker_ib"
+              name="Introducing Brokers"
+              parent="menu_brokerage_root"
+              sequence="60"/>
+    <menuitem id="menu_broker_ib_partners"
+              name="Introducing Brokers"
+              parent="menu_broker_ib"
+              action="action_broker_introducing_broker"
+              sequence="10"/>
+    <menuitem id="menu_broker_trades"
+              name="Trades"
+              parent="menu_broker_ib"
+              action="action_broker_trade"
+              sequence="20"/>
+    <menuitem id="menu_broker_ib_commissions"
+              name="IB Commissions"
+              parent="menu_broker_ib"
+              action="action_broker_ib_commission"
+              sequence="30"/>
+
+    <menuitem id="menu_broker_config"
+              name="Configuration"
+              parent="menu_brokerage_root"
+              sequence="90"
+              groups="broker_client_onboarding.group_broker_administrator"/>
+    <menuitem id="menu_broker_risk_levels"
+              name="Risk Levels"
+              parent="menu_broker_config"
+              action="action_broker_risk_level"
+              sequence="10"
+              groups="broker_client_onboarding.group_broker_administrator"/>
+    <menuitem id="menu_broker_commission_plans"
+              name="Commission Plans"
+              parent="menu_broker_config"
+              action="action_broker_commission_plan"
+              sequence="20"
+              groups="broker_client_onboarding.group_broker_administrator"/>
+</odoo>

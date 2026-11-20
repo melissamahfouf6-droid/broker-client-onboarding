@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Higher risk, tighter leverage and tighter money-movement limits.
+         Amounts are in the company currency. A movement strictly above the
+         second-approval threshold needs Compliance and then Finance. -->
+    <record id="risk_level_low" model="broker.risk.level">
+        <field name="name">Low</field>
+        <field name="code">low</field>
+        <field name="sequence">10</field>
+        <field name="max_leverage">500</field>
+        <field name="max_single_deposit">100000</field>
+        <field name="max_single_withdrawal">50000</field>
+        <field name="daily_withdrawal_limit">75000</field>
+        <field name="second_approval_threshold">10000</field>
+        <field name="notes">Established clients. Retail-style default leverage is still 1:100; 1:500 is the ceiling, not the default.</field>
+    </record>
+    <record id="risk_level_medium" model="broker.risk.level">
+        <field name="name">Medium</field>
+        <field name="code">medium</field>
+        <field name="sequence">20</field>
+        <field name="max_leverage">100</field>
+        <field name="max_single_deposit">25000</field>
+        <field name="max_single_withdrawal">10000</field>
+        <field name="daily_withdrawal_limit">15000</field>
+        <field name="second_approval_threshold">5000</field>
+        <field name="notes">Standard retail file. Leverage stays at or below 1:100 and mid-size withdrawals need a second pair of eyes sooner.</field>
+    </record>
+    <record id="risk_level_high" model="broker.risk.level">
+        <field name="name">High</field>
+        <field name="code">high</field>
+        <field name="sequence">30</field>
+        <field name="max_leverage">30</field>
+        <field name="max_single_deposit">5000</field>
+        <field name="max_single_withdrawal">2000</field>
+        <field name="daily_withdrawal_limit">3000</field>
+        <field name="second_approval_threshold">1000</field>
+        <field name="notes">New, restricted or higher-risk clients. Leverage is capped at 1:30, in line with a retail major-FX limit, and almost every withdrawal needs two approvals.</field>
+    </record>
+</odoo>

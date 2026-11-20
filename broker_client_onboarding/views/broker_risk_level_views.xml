@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_broker_risk_level_list" model="ir.ui.view">
+        <field name="name">broker.risk.level.list</field>
+        <field name="model">broker.risk.level</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="max_leverage"/>
+                <field name="max_single_deposit"/>
+                <field name="max_single_withdrawal"/>
+                <field name="daily_withdrawal_limit"/>
+                <field name="second_approval_threshold"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_broker_risk_level_form" model="ir.ui.view">
+        <field name="name">broker.risk.level.form</field>
+        <field name="model">broker.risk.level</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Low"/></h1>
+                    </div>
+                    <div class="alert alert-info" role="alert">
+                        A higher risk level takes a lower leverage cap and tighter funding limits.
+                        A deposit or withdrawal strictly above the second-approval threshold needs Compliance and then a Finance Manager.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="sequence"/>
+                            <field name="active" invisible="1"/>
+                            <field name="max_leverage"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group>
+                            <field name="max_single_deposit"/>
+                            <field name="max_single_withdrawal"/>
+                            <field name="daily_withdrawal_limit"/>
+                            <field name="second_approval_threshold"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" placeholder="Who this level is for, and which jurisdiction's leverage cap it follows."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_broker_risk_level_search" model="ir.ui.view">
+        <field name="name">broker.risk.level.search</field>
+        <field name="model">broker.risk.level</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_broker_risk_level" model="ir.actions.act_window">
+        <field name="name">Risk Levels</field>
+        <field name="res_model">broker.risk.level</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Define a client risk level</p>
+            <p>Higher risk means lower leverage and lower deposit and withdrawal limits.</p>
+        </field>
+    </record>
+</odoo>

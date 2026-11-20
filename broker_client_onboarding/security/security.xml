@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="module_category_brokerage">
+        <field name="name">Brokerage</field>
+        <field name="description">Client onboarding, KYC and funding for an online broker.</field>
+        <field name="sequence">25</field>
+    </record>
+
+    <record model="res.groups.privilege" id="privilege_broker_operations">
+        <field name="name">Broker Operations</field>
+        <field name="sequence">10</field>
+        <field name="category_id" ref="module_category_brokerage"/>
+        <field name="description">Who can onboard clients, review KYC and approve money movement.</field>
+    </record>
+
+    <record id="group_broker_back_office" model="res.groups">
+        <field name="name">Back Office User</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="privilege_broker_operations"/>
+        <field name="implied_ids" eval="[(6, 0, [ref('base.group_user'), ref('base.group_partner_manager')])]"/>
+        <field name="comment">Create clients, trading accounts, KYC files and funding requests. Read the approval log. Cannot approve KYC or money movement.</field>
+    </record>
+
+    <record id="group_broker_compliance" model="res.groups">
+        <field name="name">Compliance Officer</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="privilege_broker_operations"/>
+        <field name="implied_ids" eval="[(4, ref('group_broker_back_office'))]"/>
+        <field name="comment">Review KYC documents and give the level-1 approval on deposits and withdrawals. Cannot approve a document they uploaded, or a funding request they submitted.</field>
+    </record>
+
+    <record id="group_broker_finance" model="res.groups">
+        <field name="name">Finance Manager</field>
+        <field name="sequence">30</field>
+        <field name="privilege_id" ref="privilege_broker_operations"/>
+        <field name="implied_ids" eval="[(4, ref('group_broker_compliance'))]"/>
+        <field name="comment">Give the level-2 approval above the risk threshold, mark approved movements as done, and confirm or pay introducing-broker commission.</field>
+    </record>
+
+    <record id="group_broker_administrator" model="res.groups">
+        <field name="name">Broker Administrator</field>
+        <field name="sequence">40</field>
+        <field name="privilege_id" ref="privilege_broker_operations"/>
+        <field name="implied_ids" eval="[(4, ref('group_broker_finance'))]"/>
+        <field name="comment">Maintain risk levels and introducing-broker commission plans.</field>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="broker_risk_level_company_rule" model="ir.rule">
+        <field name="name">Risk level: multi-company</field>
+        <field name="model_id" ref="model_broker_risk_level"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="broker_trading_account_company_rule" model="ir.rule">
+        <field name="name">Trading account: multi-company</field>
+        <field name="model_id" ref="model_broker_trading_account"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="broker_kyc_document_company_rule" model="ir.rule">
+        <field name="name">KYC document: multi-company</field>
+        <field name="model_id" ref="model_broker_kyc_document"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="broker_transaction_company_rule" model="ir.rule">
+        <field name="name">Transaction: multi-company</field>
+        <field name="model_id" ref="model_broker_transaction"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="broker_approval_log_company_rule" model="ir.rule">
+        <field name="name">Approval log: multi-company</field>
+        <field name="model_id" ref="model_broker_approval_log"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="broker_commission_plan_company_rule" model="ir.rule">
+        <field name="name">Commission plan: multi-company</field>
+        <field name="model_id" ref="model_broker_commission_plan"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="broker_trade_company_rule" model="ir.rule">
+        <field name="name">Trade: multi-company</field>
+        <field name="model_id" ref="model_broker_trade"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="broker_ib_commission_company_rule" model="ir.rule">
+        <field name="name">IB commission: multi-company</field>
+        <field name="model_id" ref="model_broker_ib_commission"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

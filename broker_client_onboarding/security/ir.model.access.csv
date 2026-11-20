@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_broker_risk_level_back_office,broker.risk.level back office,model_broker_risk_level,group_broker_back_office,1,0,0,0
+access_broker_risk_level_admin,broker.risk.level administrator,model_broker_risk_level,group_broker_administrator,1,1,1,1
+access_broker_trading_account_back_office,broker.trading.account back office,model_broker_trading_account,group_broker_back_office,1,1,1,1
+access_broker_kyc_document_back_office,broker.kyc.document back office,model_broker_kyc_document,group_broker_back_office,1,1,1,1
+access_broker_transaction_back_office,broker.transaction back office,model_broker_transaction,group_broker_back_office,1,1,1,1
+access_broker_approval_log_back_office,broker.approval.log back office,model_broker_approval_log,group_broker_back_office,1,0,0,0
+access_broker_commission_plan_back_office,broker.commission.plan back office,model_broker_commission_plan,group_broker_back_office,1,0,0,0
+access_broker_commission_plan_admin,broker.commission.plan administrator,model_broker_commission_plan,group_broker_administrator,1,1,1,1
+access_broker_trade_back_office,broker.trade back office,model_broker_trade,group_broker_back_office,1,1,1,1
+access_broker_ib_commission_back_office,broker.ib.commission back office,model_broker_ib_commission,group_broker_back_office,1,0,0,0
+access_broker_ib_commission_finance,broker.ib.commission finance,model_broker_ib_commission,group_broker_finance,1,1,1,1
+access_broker_kyc_reject_wizard_compliance,broker.kyc.reject.wizard compliance,model_broker_kyc_reject_wizard,group_broker_compliance,1,1,1,1
+access_broker_transaction_reject_wizard_compliance,broker.transaction.reject.wizard compliance,model_broker_transaction_reject_wizard,group_broker_compliance,1,1,1,1

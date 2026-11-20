@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_broker" model="ir.ui.view">
+        <field name="name">res.partner.form.broker</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_trading_accounts" type="object" class="oe_stat_button" icon="fa-bar-chart"
+                        invisible="not is_trader" groups="broker_client_onboarding.group_broker_back_office">
+                    <field name="trading_account_count" widget="statinfo" string="Accounts"/>
+                </button>
+                <button name="action_view_kyc_documents" type="object" class="oe_stat_button" icon="fa-id-card"
+                        invisible="not is_trader" groups="broker_client_onboarding.group_broker_back_office">
+                    <field name="kyc_document_count" widget="statinfo" string="Documents"/>
+                </button>
+                <button name="action_view_transactions" type="object" class="oe_stat_button" icon="fa-exchange"
+                        invisible="not is_trader" groups="broker_client_onboarding.group_broker_back_office">
+                    <field name="transaction_count" widget="statinfo" string="Transactions"/>
+                </button>
+                <button name="action_view_commissions" type="object" class="oe_stat_button" icon="fa-handshake-o"
+                        invisible="not is_introducing_broker" groups="broker_client_onboarding.group_broker_back_office">
+                    <field name="commission_count" widget="statinfo" string="Commissions"/>
+                </button>
+                <button name="action_view_referred_clients" type="object" class="oe_stat_button" icon="fa-users"
+                        invisible="not is_introducing_broker" groups="broker_client_onboarding.group_broker_back_office">
+                    <field name="ib_client_count" widget="statinfo" string="Referred"/>
+                </button>
+            </xpath>
+            <xpath expr="//h1" position="after">
+                <div class="d-flex align-items-center gap-2 mt-1" groups="broker_client_onboarding.group_broker_back_office">
+                    <field name="kyc_status" widget="badge" invisible="not is_trader"
+                           decoration-success="kyc_status == 'approved'"
+                           decoration-warning="kyc_status == 'pending'"
+                           decoration-danger="kyc_status in ('rejected', 'expired')"
+                           decoration-muted="kyc_status == 'not_started'"/>
+                    <span class="badge text-bg-info" invisible="not is_introducing_broker">Introducing Broker</span>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="is_trader" groups="broker_client_onboarding.group_broker_back_office"/>
+                <field name="is_introducing_broker" groups="broker_client_onboarding.group_broker_back_office"/>
+            </xpath>
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Brokerage" name="brokerage" groups="broker_client_onboarding.group_broker_back_office">
+                    <group>
+                        <group string="Client">
+                            <field name="is_trader"/>
+                            <field name="risk_level_id" invisible="not is_trader"/>
+                            <field name="kyc_status" widget="badge" invisible="not is_trader"
+                                   decoration-success="kyc_status == 'approved'"
+                                   decoration-warning="kyc_status == 'pending'"
+                                   decoration-danger="kyc_status in ('rejected', 'expired')"
+                                   decoration-muted="kyc_status == 'not_started'"/>
+                            <field name="introducing_broker_id" invisible="not is_trader"/>
+                        </group>
+                        <group string="Introducing Broker" invisible="not is_introducing_broker">
+                            <field name="is_introducing_broker"/>
+                            <field name="commission_plan_id"/>
+                            <field name="total_commission"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert" invisible="not is_introducing_broker or commission_plan_id">
+                        This introducing broker has no commission plan, so referred deposits and trades will not accrue commission.
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="not is_trader or kyc_status == 'approved'">
+                        A live account cannot be activated, and no real deposit or withdrawal can be booked, until KYC is approved.
+                    </div>
+                    <field name="ib_client_ids" invisible="not is_introducing_broker" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="email"/>
+                            <field name="kyc_status" widget="badge"/>
+                            <field name="risk_level_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_broker_list" model="ir.ui.view">
+        <field name="name">res.partner.broker.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone" optional="hide"/>
+                <field name="country_id"/>
+                <field name="risk_level_id"/>
+                <field name="kyc_status" widget="badge"
+                       decoration-success="kyc_status == 'approved'"
+                       decoration-warning="kyc_status == 'pending'"
+                       decoration-danger="kyc_status in ('rejected', 'expired')"
+                       decoration-muted="kyc_status == 'not_started'"/>
+                <field name="introducing_broker_id" optional="show"/>
+                <field name="is_trader" column_invisible="1"/>
+                <field name="is_introducing_broker" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter_broker" model="ir.ui.view">
+        <field name="name">res.partner.search.broker</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Traders" name="traders" domain="[('is_trader', '=', True)]"/>
+                <filter string="Introducing Brokers" name="introducing_brokers" domain="[('is_introducing_broker', '=', True)]"/>
+                <filter string="KYC Approved" name="kyc_approved" domain="[('kyc_status', '=', 'approved')]"/>
+                <filter string="KYC Pending" name="kyc_pending" domain="[('kyc_status', '=', 'pending')]"/>
+                <filter string="KYC Rejected" name="kyc_rejected" domain="[('kyc_status', '=', 'rejected')]"/>
+                <filter string="KYC Expired" name="kyc_expired" domain="[('kyc_status', '=', 'expired')]"/>
+                <group>
+                    <filter string="KYC Status" name="group_kyc" context="{'group_by': 'kyc_status'}"/>
+                    <filter string="Risk Level" name="group_risk" context="{'group_by': 'risk_level_id'}"/>
+                    <filter string="Introducing Broker" name="group_ib" context="{'group_by': 'introducing_broker_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_broker_client" model="ir.actions.act_window">
+        <field name="name">Clients</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_trader', '=', True)]</field>
+        <field name="context">{'default_is_trader': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Onboard a trader</p>
+            <p>Collect identity and proof of address before the client can fund a live account.</p>
+        </field>
+    </record>
+    <record id="action_broker_client_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_partner_broker_list"/>
+        <field name="act_window_id" ref="action_broker_client"/>
+    </record>
+
+    <record id="action_broker_introducing_broker" model="ir.actions.act_window">
+        <field name="name">Introducing Brokers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_introducing_broker', '=', True)]</field>
+        <field name="context">{'default_is_introducing_broker': True, 'default_is_company': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add an introducing broker</p>
+            <p>Assign a commission plan. Referred clients then accrue commission when a deposit is paid or a live trade is booked.</p>
+        </field>
+    </record>
+    <record id="action_broker_introducing_broker_view_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_partner_broker_list"/>
+        <field name="act_window_id" ref="action_broker_introducing_broker"/>
+    </record>
+</odoo>

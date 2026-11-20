@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_broker_approval_log_list" model="ir.ui.view">
+        <field name="name">broker.approval.log.list</field>
+        <field name="model">broker.approval.log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false"
+                  decoration-success="action == 'approve'"
+                  decoration-danger="action == 'reject'"
+                  decoration-warning="action == 'expire'"
+                  decoration-muted="action in ('cancel', 'submit')">
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="action"/>
+                <field name="level"/>
+                <field name="transaction_id"/>
+                <field name="kyc_document_id"/>
+                <field name="amount"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="comment"/>
+                <field name="res_model" optional="hide"/>
+                <field name="res_id" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_broker_approval_log_form" model="ir.ui.view">
+        <field name="name">broker.approval.log.form</field>
+        <field name="model">broker.approval.log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        This entry is immutable. A correction is a new decision, never an edit of history.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                            <field name="action"/>
+                            <field name="level"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="transaction_id"/>
+                            <field name="kyc_document_id"/>
+                            <field name="res_model"/>
+                            <field name="res_id"/>
+                            <field name="amount"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="comment"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_broker_approval_log_search" model="ir.ui.view">
+        <field name="name">broker.approval.log.search</field>
+        <field name="model">broker.approval.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="user_id"/>
+                <field name="transaction_id"/>
+                <field name="kyc_document_id"/>
+                <field name="comment"/>
+                <filter string="My Decisions" name="my_decisions" domain="[('user_id', '=', uid)]"/>
+                <filter string="Approvals" name="approvals" domain="[('action', '=', 'approve')]"/>
+                <filter string="Rejections" name="rejections" domain="[('action', '=', 'reject')]"/>
+                <filter string="Submissions" name="submissions" domain="[('action', '=', 'submit')]"/>
+                <filter string="Expiries" name="expiries" domain="[('action', '=', 'expire')]"/>
+                <group>
+                    <filter string="Action" name="group_action" context="{'group_by': 'action'}"/>
+                    <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Model" name="group_model" context="{'group_by': 'res_model'}"/>
+                    <filter string="Day" name="group_day" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_broker_approval_log" model="ir.actions.act_window">
+        <field name="name">Approval Log</field>
+        <field name="res_model">broker.approval.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No decisions have been recorded yet</p>
+            <p>Every KYC review and every funding decision is appended here and cannot be edited or deleted.</p>
+        </field>
+    </record>
+</odoo>

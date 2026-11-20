@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_broker_trading_account" model="ir.sequence">
+        <field name="name">Trading Account</field>
+        <field name="code">broker.trading.account</field>
+        <field name="prefix">CFI-</field>
+        <field name="padding">6</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_broker_transaction_deposit" model="ir.sequence">
+        <field name="name">Broker Deposit</field>
+        <field name="code">broker.transaction.deposit</field>
+        <field name="prefix">DEP/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_broker_transaction_withdrawal" model="ir.sequence">
+        <field name="name">Broker Withdrawal</field>
+        <field name="code">broker.transaction.withdrawal</field>
+        <field name="prefix">WDR/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_broker_trade" model="ir.sequence">
+        <field name="name">Broker Trade</field>
+        <field name="code">broker.trade</field>
+        <field name="prefix">TRD/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_broker_ib_commission" model="ir.sequence">
+        <field name="name">IB Commission</field>
+        <field name="code">broker.ib.commission</field>
+        <field name="prefix">COM/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>
